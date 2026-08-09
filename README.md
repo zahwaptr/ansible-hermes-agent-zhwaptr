@@ -2,11 +2,11 @@
 
 Ansible role untuk instalasi otomatis Hermes Agent (Telegram AI gateway) pada server Linux/macOS venv terisolasi, konfigurasi provider AI, dan systemd service, semuanya idempotent.
 
-Role ini dibuat untuk menggantikan proses install manual (copy-paste script bash + isi form interaktif satu-satu) dengan satu playbook yang bisa dijalankan ulang tanpa efek samping, dan aman disimpan di Git (secrets tidak pernah ke commit).
+Role ini saya buat untuk menggantikan proses install manual (copy-paste script bash + isi form interaktif satu-satu) dengan satu playbook yang bisa dijalankan ulang tanpa efek samping apapun, dan aman disimpan di Git (secrets tidak pernah ke commit).
 
 ## Supported OS
 
-Role ini sudah diuji pada:
+Role ini sudah saya uji pada:
 
 | OS | Catatan |
 | --- | --- |
