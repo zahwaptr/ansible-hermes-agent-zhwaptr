@@ -1,8 +1,8 @@
 # Ansible Hermes Agent Installer
 
-Ansible role untuk instalasi otomatis Hermes Agent (Telegram AI gateway) pada server Linux/macOS — venv terisolasi, konfigurasi provider AI, dan systemd service, semuanya idempotent.
+Ansible role untuk instalasi otomatis Hermes Agent (Telegram AI gateway) pada server Linux/macOS venv terisolasi, konfigurasi provider AI, dan systemd service, semuanya idempotent.
 
-Role ini dibuat untuk menggantikan proses install manual (copy-paste script bash + isi form interaktif satu-satu) dengan satu playbook yang bisa dijalankan ulang tanpa efek samping, dan aman disimpan di Git (secrets tidak pernah ke-commit).
+Role ini dibuat untuk menggantikan proses install manual (copy-paste script bash + isi form interaktif satu-satu) dengan satu playbook yang bisa dijalankan ulang tanpa efek samping, dan aman disimpan di Git (secrets tidak pernah ke commit).
 
 ## Supported OS
 
@@ -13,7 +13,7 @@ Role ini sudah diuji pada:
 | Ubuntu 22.04 / 24.04 | OK | via `apt` |
 | Debian 12 | OK | via `apt` |
 | Rocky Linux 9 | OK | via `dnf` |
-| macOS (Apple Silicon & Intel) | OK | via Homebrew — Homebrew harus sudah terinstall lebih dulu |
+| macOS (Apple Silicon & Intel) | OK | via Homebrew Homebrew harus sudah terinstall lebih dulu |
 
 > Catatan: Windows tidak didukung role ini. Ansible mengelola Windows lewat WinRM dengan cara yang cukup berbeda dari SSH-based Linux/macOS.
 
@@ -21,11 +21,11 @@ Role ini sudah diuji pada:
 
 - Auto-detect OS family (`ansible_os_family`) dan pilih package manager yang sesuai (apt/dnf/brew).
 - Install Python 3.11+ kalau belum ada, dan gagal cepat dengan pesan jelas kalau versi kurang.
-- Install `hermes-agent` ke **virtualenv terisolasi** — menghindari error `externally-managed-environment` di Ubuntu 23.04+/Debian 12+.
-- Render `~/.hermes/.env` dari template Jinja2 (bukan `>>` append) — aman di-run ulang, tidak duplikat, permission `0600`.
+- Install `hermes-agent` ke **virtualenv terisolasi** menghindari error `externally-managed-environment` di Ubuntu 23.04+/Debian 12+.
+- Render `~/.hermes/.env` dari template Jinja2 (bukan `>>` append) aman di-run ulang, tidak duplikat, permission `0600`.
 - Setup provider AI: DeepSeek, OpenRouter, atau Ollama (pilih salah satu).
 - Untuk Ollama: install binary + pull model secara idempotent (cek dulu sebelum install/pull ulang).
-- Setup systemd service untuk gateway Telegram (auto-restart, jalan terus walau SSH ditutup) — khusus Linux.
+- Setup systemd service untuk gateway Telegram (auto-restart, jalan terus walau SSH ditutup) khusus Linux.
 - Assert di awal play: gagal cepat kalau token/secrets belum diisi, daripada gagal di tengah proses.
 
 ## Role Structure
@@ -94,7 +94,7 @@ Penjelasan:
 | `deepseek_api_key` | Wajib diisi kalau `hermes_provider: deepseek` |
 | `openrouter_api_key` | Wajib diisi kalau `hermes_provider: openrouter` |
 | `hermes_ollama_model` | Model Ollama, default `llama3.2:3b` |
-| `hermes_service_enabled` | `true`/`false` — setup systemd service (Linux) |
+| `hermes_service_enabled` | `true`/`false` setup systemd service (Linux) |
 
 ## Inventory Example
 
@@ -107,7 +107,7 @@ myserver ansible_host=192.168.1.10 ansible_user=ubuntu
 
 ## Playbook Example
 
-`site.yml` sudah jadi entry point langsung — tidak perlu file playbook tambahan:
+`site.yml` sudah jadi entry point langsung tidak perlu file playbook tambahan:
 
 ```yaml
 ---
@@ -148,7 +148,7 @@ sudo systemctl status hermes-agent
 sudo journalctl -u hermes-agent -n 50
 ```
 
-Buka Telegram, cari bot kamu, kirim `Halo` — kalau dibalas, instalasi berhasil.
+Buka Telegram, cari bot kamu, kirim `Halo` kalau dibalas, instalasi berhasil.
 
 ## Notes
 
