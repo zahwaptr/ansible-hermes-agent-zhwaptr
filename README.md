@@ -8,8 +8,8 @@ Role ini dibuat untuk menggantikan proses install manual (copy-paste script bash
 
 Role ini sudah diuji pada:
 
-| OS | Status | Catatan |
-| --- | --- | --- |
+| OS | Catatan |
+| --- | --- |
 | Ubuntu 22.04 / 24.04 | via `apt` |
 | Debian 12 | via `apt` |
 | Rocky Linux 9 | via `dnf` |
