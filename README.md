@@ -10,10 +10,10 @@ Role ini sudah diuji pada:
 
 | OS | Status | Catatan |
 | --- | --- | --- |
-| Ubuntu 22.04 / 24.04 | OK | via `apt` |
-| Debian 12 | OK | via `apt` |
-| Rocky Linux 9 | OK | via `dnf` |
-| macOS (Apple Silicon & Intel) | OK | via Homebrew Homebrew harus sudah terinstall lebih dulu |
+| Ubuntu 22.04 / 24.04 | via `apt` |
+| Debian 12 | via `apt` |
+| Rocky Linux 9 | via `dnf` |
+| macOS (Apple Silicon & Intel) | via Homebrew Homebrew harus sudah terinstall lebih dulu |
 
 > Catatan: Windows tidak didukung role ini. Ansible mengelola Windows lewat WinRM dengan cara yang cukup berbeda dari SSH-based Linux/macOS.
 
