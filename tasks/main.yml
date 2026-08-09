@@ -1,0 +1,35 @@
+---
+- name: Assert supported OS
+  ansible.builtin.assert:
+    that:
+      - ansible_os_family in ['Debian', 'RedHat', 'Darwin']
+    fail_msg: "OS {{ ansible_os_family }} belum didukung playbook ini."
+    quiet: true
+
+- name: Install Python 3.11+
+  ansible.builtin.import_tasks: install_python.yml
+
+- name: Install Hermes Agent (venv + pip)
+  ansible.builtin.import_tasks: install_hermes.yml
+
+- name: Configure .env
+  ansible.builtin.import_tasks: configure_env.yml
+
+- name: Set up AI provider
+  ansible.builtin.import_tasks: setup_provider.yml
+
+- name: Set up background service
+  ansible.builtin.import_tasks: setup_service.yml
+  when:
+    - hermes_service_enabled | bool
+    - ansible_system == 'Linux'
+
+- name: Note about macOS service mode
+  ansible.builtin.debug:
+    msg: >
+      macOS terdeteksi — systemd tidak tersedia, jadi service background
+      dilewati. Jalankan manual dengan '{{ hermes_venv_path }}/bin/hermes gateway run'
+      atau pakai launchd sendiri kalau butuh auto-start.
+  when:
+    - hermes_service_enabled | bool
+    - ansible_system != 'Linux'

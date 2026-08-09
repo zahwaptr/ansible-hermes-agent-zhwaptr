@@ -1,0 +1,11 @@
+---
+- name: reload systemd and restart hermes
+  become: true
+  ansible.builtin.systemd:
+    name: "{{ hermes_service_name }}"
+    daemon_reload: true
+    state: restarted
+  listen: "reload systemd and restart hermes"
+  when:
+    - hermes_service_enabled | bool
+    - ansible_system == 'Linux'

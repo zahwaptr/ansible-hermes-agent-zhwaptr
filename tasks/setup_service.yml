@@ -1,0 +1,21 @@
+---
+# The original dashboard only offered `hermes gateway run` (foreground,
+# dies when SSH closes) as the tested path, with background/service mode
+# left as a manual follow-up. Here it's provisioned automatically via
+# systemd, idempotently.
+
+- name: Install systemd unit for hermes-agent
+  become: true
+  ansible.builtin.template:
+    src: hermes-agent.service.j2
+    dest: "/etc/systemd/system/{{ hermes_service_name }}.service"
+    mode: "0644"
+  notify: reload systemd and restart hermes
+
+- name: Enable and start hermes-agent service
+  become: true
+  ansible.builtin.systemd:
+    name: "{{ hermes_service_name }}"
+    enabled: true
+    state: started
+    daemon_reload: true

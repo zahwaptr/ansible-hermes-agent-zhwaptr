@@ -1,0 +1,7 @@
+inventory.ini
+group_vars/all.yml
+*.retry
+vault_pass.txt
+*.pyc
+__pycache__/
+.DS_Store

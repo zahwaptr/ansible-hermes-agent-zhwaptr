@@ -1,0 +1,14 @@
+# Copy to group_vars/all.yml (gitignored) and fill in real values,
+# or better: encrypt with `ansible-vault encrypt group_vars/all.yml`.
+
+# --- Telegram (required) ---
+telegram_bot_token: "CHANGE_ME"          # from @BotFather
+telegram_allowed_users: "CHANGE_ME"      # your numeric Telegram user id, from @userinfobot
+telegram_home_channel: "{{ telegram_allowed_users }}"
+
+# --- AI Provider: choose ONE of deepseek | openrouter | ollama ---
+hermes_provider: "deepseek"
+
+deepseek_api_key: "CHANGE_ME"
+openrouter_api_key: "CHANGE_ME"
+hermes_ollama_model: "llama3.2:3b"

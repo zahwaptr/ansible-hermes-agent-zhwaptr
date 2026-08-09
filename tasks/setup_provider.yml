@@ -1,0 +1,29 @@
+---
+# deepseek / openrouter only need the API key, already templated into .env
+# by configure_env.yml — nothing else to install for those.
+
+- name: Check if ollama is already installed
+  ansible.builtin.command: which ollama
+  register: hermes_ollama_check
+  changed_when: false
+  failed_when: false
+  when: hermes_provider == 'ollama'
+
+- name: Install Ollama
+  become: true
+  ansible.builtin.shell: curl -fsSL https://ollama.com/install.sh | sh
+  when:
+    - hermes_provider == 'ollama'
+    - hermes_ollama_check.rc != 0
+
+- name: Check if the target Ollama model is already pulled
+  ansible.builtin.command: "ollama list"
+  register: hermes_ollama_models
+  changed_when: false
+  when: hermes_provider == 'ollama'
+
+- name: Pull Ollama model ({{ hermes_ollama_model }})
+  ansible.builtin.command: "ollama pull {{ hermes_ollama_model }}"
+  when:
+    - hermes_provider == 'ollama'
+    - hermes_ollama_model not in hermes_ollama_models.stdout

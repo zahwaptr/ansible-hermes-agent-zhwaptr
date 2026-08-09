@@ -1,0 +1,20 @@
+---
+# General
+hermes_config_dir: "{{ ansible_env.HOME }}/.hermes"
+hermes_venv_path: "{{ ansible_env.HOME }}/.hermes/venv"
+hermes_pip_package: "hermes-agent"
+hermes_python_min_minor: 11   # requires Python 3.11+
+
+# Provider: deepseek | openrouter | ollama
+hermes_provider: "deepseek"
+hermes_ollama_model: "llama3.2:3b"
+hermes_ollama_api_url: "http://localhost:11434"
+
+# Telegram (must be overridden — see group_vars/all.yml.example)
+telegram_bot_token: "CHANGE_ME"
+telegram_allowed_users: "CHANGE_ME"
+telegram_home_channel: "{{ telegram_allowed_users }}"
+
+# Service
+hermes_service_enabled: true   # Linux only; macOS runs in foreground/testing mode
+hermes_service_name: "hermes-agent"

@@ -1,0 +1,63 @@
+---
+# Branch per OS family instead of trying apt AND dnf on every host and
+# swallowing errors — that pattern in the original bash script masked real
+# install failures.
+
+- name: Install Python 3 + venv (Debian/Ubuntu)
+  become: true
+  ansible.builtin.apt:
+    name:
+      - python3
+      - python3-pip
+      - python3-venv
+    state: present
+    update_cache: true
+  when: ansible_os_family == 'Debian'
+
+- name: Install Python 3 + pip (RedHat/Rocky/Fedora)
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - python3
+      - python3-pip
+    state: present
+  when: ansible_os_family == 'RedHat'
+
+- name: Check if Homebrew is installed (macOS)
+  ansible.builtin.command: brew --version
+  register: hermes_brew_check
+  changed_when: false
+  failed_when: false
+  when: ansible_os_family == 'Darwin'
+
+- name: Fail with a clear message if Homebrew is missing (macOS)
+  ansible.builtin.fail:
+    msg: >
+      Homebrew belum terinstall di host ini. Install dulu manual:
+      /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+      (sengaja tidak diotomatisasi karena installer Homebrew butuh interaksi/sudo prompt)
+  when:
+    - ansible_os_family == 'Darwin'
+    - hermes_brew_check.rc is defined
+    - hermes_brew_check.rc != 0
+
+- name: Install Python 3.11 via Homebrew (macOS)
+  become: false
+  community.general.homebrew:
+    name: python@3.11
+    state: present
+  when: ansible_os_family == 'Darwin'
+
+- name: Detect installed python3 version
+  ansible.builtin.command: python3 --version
+  register: hermes_python_version
+  changed_when: false
+
+- name: Fail if Python version is below the minimum required
+  ansible.builtin.assert:
+    that:
+      - hermes_python_version.stdout.split(' ')[1].split('.')[0] | int == 3
+      - hermes_python_version.stdout.split(' ')[1].split('.')[1] | int >= hermes_python_min_minor
+    fail_msg: >
+      Terdeteksi {{ hermes_python_version.stdout }}, tapi Hermes butuh
+      Python 3.{{ hermes_python_min_minor }}+. Cek PATH / versi python3 di host ini.

@@ -1,0 +1,16 @@
+[Unit]
+Description=Hermes Agent Telegram Gateway
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User={{ ansible_user_id }}
+WorkingDirectory={{ hermes_config_dir }}
+ExecStart={{ hermes_venv_path }}/bin/hermes gateway run
+Restart=on-failure
+RestartSec=5
+EnvironmentFile={{ hermes_config_dir }}/.env
+
+[Install]
+WantedBy=multi-user.target

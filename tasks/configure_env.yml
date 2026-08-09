@@ -1,0 +1,11 @@
+---
+# Templating instead of `>>` appends fixes two bugs from the original bash
+# script: re-running it no longer duplicates lines in .env, and the file
+# gets mode 0600 explicitly (it holds tokens/API keys).
+- name: Render ~/.hermes/.env from template
+  ansible.builtin.template:
+    src: env.j2
+    dest: "{{ hermes_config_dir }}/.env"
+    mode: "0600"
+  no_log: "{{ hermes_hide_secrets | default(true) }}"
+  notify: reload systemd and restart hermes

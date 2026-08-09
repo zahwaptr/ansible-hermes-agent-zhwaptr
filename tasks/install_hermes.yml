@@ -1,0 +1,27 @@
+---
+- name: Ensure ~/.hermes config directory exists
+  ansible.builtin.file:
+    path: "{{ hermes_config_dir }}"
+    state: directory
+    mode: "0700"
+
+# The pip module with `virtualenv:` creates the venv AND installs into it in
+# one idempotent step. This avoids the "externally-managed-environment"
+# error that a bare `pip install hermes-agent` hits on Ubuntu 23.04+/Debian
+# 12+ (PEP 668).
+- name: Install hermes-agent into an isolated venv
+  become: false
+  ansible.builtin.pip:
+    name: "{{ hermes_pip_package }}"
+    virtualenv: "{{ hermes_venv_path }}"
+    virtualenv_command: "python3 -m venv"
+    state: present
+
+- name: Verify hermes CLI is reachable
+  ansible.builtin.command: "{{ hermes_venv_path }}/bin/hermes --version"
+  register: hermes_version_check
+  changed_when: false
+
+- name: Show installed hermes version
+  ansible.builtin.debug:
+    msg: "hermes-agent installed: {{ hermes_version_check.stdout }}"
