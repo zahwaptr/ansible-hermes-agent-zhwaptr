@@ -2,23 +2,23 @@
 - name: Install and configure Hermes Agent
   hosts: hermes_servers
   gather_facts: true
-  # NOTE: become is set per-task, not globally here — package installs
-  # (apt/dnf) need root, but venv/pip/brew and the ~/.hermes files must run
-  # as the normal user (Homebrew even refuses to run as root).
 
   pre_tasks:
+    - name: Compute whether required secrets are still placeholders
+      ansible.builtin.set_fact:
+        hermes_secrets_missing: "{{ (telegram_bot_token | default('CHANGE_ME')) == 'CHANGE_ME' or (telegram_allowed_users | default('CHANGE_ME')) == 'CHANGE_ME' }}"
+
     - name: Fail fast if required secrets are not set
-      ansible.builtin.assert:
-        that:
-          - telegram_bot_token is defined
-          - telegram_bot_token != "CHANGE_ME"
-          - telegram_allowed_users is defined
-          - telegram_allowed_users != "CHANGE_ME"
-        fail_msg: >
+      ansible.builtin.fail:
+        msg: >
           telegram_bot_token / telegram_allowed_users belum di-set.
           Copy group_vars/all.yml.example ke group_vars/all.yml lalu isi,
           atau enkripsi dengan ansible-vault.
-        quiet: true
+      when: hermes_secrets_missing
+
+  handlers:
+    - name: Import hermes-agent handlers
+      ansible.builtin.import_tasks: handlers/main.yml
 
   tasks:
     - name: Run hermes-agent install tasks
