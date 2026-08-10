@@ -1,9 +1,9 @@
----
 # General
 hermes_config_dir: "{{ ansible_env.HOME }}/.hermes"
 hermes_venv_path: "{{ ansible_env.HOME }}/.hermes/venv"
 hermes_pip_package: "hermes-agent"
 hermes_python_min_minor: 11   # requires Python 3.11+
+hermes_python_bin: "python3"  # overridden per-OS in tasks/install_python.yml
 
 # Provider: deepseek | openrouter | ollama
 hermes_provider: "deepseek"
