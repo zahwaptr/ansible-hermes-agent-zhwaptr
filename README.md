@@ -78,8 +78,8 @@ Target server:
 Contoh variable minimal di `group_vars/all.yml` (copy dari `group_vars/all.yml.example`):
 
 ```yaml
-telegram_bot_token: "1234567890:ABCdefGHIjklmNOPqrstUVwxyz"
-telegram_allowed_users: "6902977355"
+telegram_bot_token: "1xxxxxxxxxxxxz"
+telegram_allowed_users: "6xxxxxxx5"
 hermes_provider: "deepseek"
 deepseek_api_key: "sk-xxxxxxxx"
 ```
@@ -102,7 +102,7 @@ Contoh `inventory.ini` (copy dari `inventory.example.ini`):
 
 ```ini
 [hermes_servers]
-myserver ansible_host=192.168.1.10 ansible_user=ubuntu
+myserver ansible_host=192.168.x.x ansible_user=ubuntu
 ```
 
 ## Playbook Example
